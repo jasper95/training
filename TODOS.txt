@@ -1,0 +1,9 @@
+ASYNC tasks
+-auto parse response body
+
+BLUEBIRD
+-complete examples for CORE APIs
+-map, filter, reduce combination
+-.each usage
+-.some and .race usage
+-.fromCallback and .asCallback

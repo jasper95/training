@@ -5,9 +5,6 @@ const fs = require('fs');
 Promise.promisifyAll(fs)
 Promise.promisifyAll(request);
 
-const post = request.getAsync('http://jsonplaceholder.typicode.com/posts/1');
-const user = request.getAsync('http://jsonplaceholder.typicode.com/users/1');
-
 //new Promise
 // let myFirstPromise = new Promise((resolve, reject) => {
 //   setTimeout(function(){
@@ -19,7 +16,8 @@ const user = request.getAsync('http://jsonplaceholder.typicode.com/users/1');
 //   console.log("Yay! " + successMessage);
 // });
 
-//
+// const post = request.getAsync('http://jsonplaceholder.typicode.com/posts/1');
+// const user = request.getAsync('http://jsonplaceholder.typicode.com/users/1');
 
 //all and spread
 // Promise.all([post, user])
@@ -47,25 +45,25 @@ const user = request.getAsync('http://jsonplaceholder.typicode.com/users/1');
 // }).then(names => console.log(names.join(", ")))
 //   .catch(err => console.log(err))
 
-// class PingPong {
-//   constructor(){
-//     this.pong = Promise.coroutine(function*(value){
-//       console.log("Ping?", value);
-//       yield Promise.delay(500);
-//       this.ping(value + 1)
-//     })
-//     this.ping  = Promise.coroutine(function*(value){
-//       console.log("Ping?", value);
-//       yield Promise.delay(500);
-//       this.ping(value + 1)
-//     });
-//   }
-// }
-// const testPingPong = new PingPong();
-// testPingPong.ping(0);
+class PingPong {
+  constructor(){
+    this.pong = Promise.coroutine(function*(value){
+      console.log("Ping?", value);
+      yield Promise.delay(500);
+      this.ping(value + 1)
+    })
+    this.ping  = Promise.coroutine(function*(value){
+      console.log("Ping?", value);
+      yield Promise.delay(500);
+      this.ping(value + 1)
+    });
+  }
+}
+const testPingPong = new PingPong();
+testPingPong.ping(0);
 
 
-// //coroutine with generators
+//coroutine with generators
 // Promise.coroutine(function* () {
 //   const post2 = yield request.getAsync('http://jsonplaceholder.typicode.com/posts/1');
 //   const user2 = yield request.getAsync('http://jsonplaceholder.typicode.com/users/1');
