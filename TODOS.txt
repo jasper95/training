@@ -1,9 +1,9 @@
-ASYNC tasks
--auto parse response body
+ASYNC TASK
+-simulate check id --DONE
 
 BLUEBIRD
--complete examples for CORE APIs
--map, filter, reduce combination
--.each usage
--.some and .race usage
--.fromCallback and .asCallback
+-complete examples for CORE APIs ---DONE
+-map, filter, reduce combination ---DONE
+-.each usage --DONE
+-.some and .race usage  --DONE
+-.fromCallback and .asCallback --DONE

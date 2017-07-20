@@ -17,31 +17,39 @@ Promise.promisifyAll(request);
 // console.log(gen.next(5)); //{value:undefined, done: true}
 // console.log(gen.next()); //{value:undefined, done: true}
 
-function async(makeGenerator){
-  return function () {
-    const generator = makeGenerator.apply(this, arguments);
-
-    function handle(result){
-      // result => { done: [Boolean], value: [Object] }
-      if (result.done) return Promise.resolve(result.value);
-
-      return Promise.resolve(result.value).then(function (res){
-        return handle(generator.next(res));
-      }, function (err){
-        return handle(generator.throw(err));
-      });
-    }
-
-    try {
-      return handle(generator.next());
-    } catch (ex) {
-      return Promise.reject(ex);
-    }
-  }
-}
-
-async(function* () {
-  const post2 = yield request.getAsync('http://jsonplaceholder.typicode.com/posts/1');
-  const user2 = yield request.getAsync('http://jsonplaceholder.typicode.com/users/1');
-  console.log(post2.body, user2.body);
-})();
+// code taken from DOCS
+// function async(makeGenerator){
+//   return function () {
+//     const generator = makeGenerator.apply(this, arguments);
+//
+//     function handle(result){
+//       // result => { done: [Boolean], value: [Object] }
+//       if (result.done) return Promise.resolve(result.value);
+//
+//       return Promise.resolve(result.value).then(function (res){
+//         return handle(generator.next(res));
+//       }, function (err){
+//         return handle(generator.throw(err));
+//       });
+//     }
+//
+//     try {
+//       return handle(generator.next());
+//     } catch (ex) {
+//       return Promise.reject(ex);
+//     }
+//   }
+// }
+//
+// async(function* () {
+//   try{
+//     let post2 = yield request.getAsync('http://jsonplaceholder.typicode.com/posts/1');
+//     post2 = JSON.parse(post2.body)
+//     console.log(post2.title);
+//     let user2 = yield request.getAsync('http://jsonplaceholder.typicode.com/users/1');
+//     user2 = JSON.parse(user2.body);
+//     console.log(user2.name);
+//   }catch(e){
+//       console.log(e)
+//   }
+// })();
