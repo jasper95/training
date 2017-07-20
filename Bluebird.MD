@@ -1,16 +1,16 @@
-new Promise(resolve, reject, onCancel)
+new Promise(resolve, reject, onCancel) -> Promise
   -> Creates a promise that represents a future value. 3 states: pending, rejected, fullfilled.
 
-.then(fn)
+.then(fn) -> Promise
   -> executes a callback with the value sent from calling resolve
 
-.catch(fn)
+.catch(fn) -> Promise
   -> executes a callback with the value sent from calling reject
 
 .error(fn)
   -> Like .catch but instead of catching all types of exceptions, it only catches operational errors. AggregateError and OperationalError
 
-.bind(thisArg)
+.bind(thisArg) -> Promise
   -> Create a promise that follows this promise or in the static method is resolved with the given value, but is bound to the given thisArg value
 
 .finally -> Promise

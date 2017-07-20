@@ -9,17 +9,19 @@ Promise.promisifyAll(request);
   const user = request.getAsync('http://jsonplaceholder.typicode.com/users/1');
 
   // all and spread
-  // Promise.all([post, user])
-  //   .spread((post, user) => {
-  //     post = JSON.parse(post.body)
-  //     user = JSON.parse(user.body)
-  //     console.log(`${post.title}, ${user.name}`)
-  //   }).catch(err => console.log(err));
+  Promise
+    .all([post, user])
+    .spread((post, user) => {
+      post = JSON.parse(post.body)
+      user = JSON.parse(user.body)
+      console.log(`${post.title}, ${user.name}`)})
+    .catch(err => console.log(err));
 
   // join
-  Promise.join(post, user, (post, user) => {
-    post = JSON.parse(post.body)
-    user = JSON.parse(user.body)
-    console.log(`${post.title}, ${user.name}`)
-  }).catch(err => console.log(err));
+  Promise
+    .join(post, user, (post, user) => {
+      post = JSON.parse(post.body)
+      user = JSON.parse(user.body)
+      console.log(`${post.title}, ${user.name}`)})
+    .catch(err => console.log(err));
 }());

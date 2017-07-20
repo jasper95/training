@@ -12,11 +12,11 @@ function async(makeGenerator){
       // result => { done: [Boolean], value: [Object] }
       if (result.done) return Promise.resolve(result.value);
 
-      return Promise.resolve(result.value).then(function (res){
-        return handle(generator.next(res));
-      }, function (err){
-        return handle(generator.throw(err));
-      });
+      return Promise
+              .resolve(result.value)
+              .then(res => handle(generator.next(res)),
+                    err => handle(generator.throw(err))
+              );
     }
 
     try {
@@ -38,7 +38,7 @@ async(function* () {
       user,
       post,
     };
-  }catch(e){
+  } catch(e){
       return {status: "FAILED"};
   }
 })().then(res => console.log(res));
