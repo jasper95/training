@@ -1,6 +1,9 @@
 new Promise(resolve, reject, onCancel) -> Promise
   -> Creates a promise that represents a future value. 3 states: pending, rejected, fullfilled.
 
+.join
+  -> For coordinating multiple concurrent discrete promises. While .all is good for handling a dynamically sized list of uniform promises, Promise.join is much easier (and more performant) to use when you have a fixed amount of discrete promises that you want to coordinate concurrently.
+
 .then(fn) -> Promise
   -> executes a callback with the value sent from calling resolve
 
@@ -44,7 +47,7 @@ Promise.fromCallback(fn, {multiArgs: boolean}) -> Promise
   -> the next promise depends on multiple promises resolving. accepts array of promises
 
 .props({a : Promise..}) -> {b : Promise}
-  -> same with all but accepts dictionary of promises
+  -> same with all but accepts dictionary of promises. if no use for the result object other than retrieving the properties, it is more convenient to use Promise.join
 
 .spread(fn(a, ...))
   -> flatten the returning array
@@ -65,7 +68,7 @@ Promise.race([Promise]) -> Promise
   -> same as race but does not qualify rejected result
 
 .some([Promise], n) -> [Promise]
-  -> returns the first n promise(s) resolved as an array.
+  -> returns the first n promise(s) resolved as an array. If too many promises are rejected so that the promise can never become fulfilled, it will be immediately rejected with an AggregateError of the rejection reasons in the order they were thrown in.
 
 .tap(fn) -> Promise
   -> same with finally but the difference is it's not NOT CALLED on reject
@@ -79,11 +82,11 @@ Promise.race([Promise]) -> Promise
 .return(val) or .thenReturn(val)
   -> enables to return a value already bound as this method is called
 
+Promise.disposer(fn) -> Disposer
+    ->  method that cleans up a resource when using Promise.using. attach a callback to close resource to avoid leaks. If a disposer method throws or returns a rejected promise, it's highly likely that it failed to dispose of the resource.
+
 Promise.using(Promise|Disposer|resource) -> Promise
   -> make sure that no matter what, the specified disposer will be called when the promise returned by the callback passed to using has settled
-
-Promise.disposer(fn) -> Disposer
-    ->  method that cleans up a resource when using Promise.using
 
 .delay(n) -> Promise
   -> Returns a promise that will be resolved with value (or undefined) after given ms milliseconds. If value is a promise, the delay will start counting down when it is fulfilled and the returned promise will be fulfilled with the fulfillment value of the value promise. If value is a rejected promise, the resulting promise will be rejected immediately.
@@ -110,13 +113,16 @@ Promise.coroutine.addYieldHandler(fn) -> undefined
   -> By default you can only yield Promises and Thenables inside coroutines. You can use this function to add yielding support for arbitrary types.
 
 OperationalError
-  -> Represents an error is an explicit promise rejection as opposed to a thrown error. caught in .error handler
+  -> Represents an error is an explicit promise rejection as opposed to a thrown error.For example, if an error is errbacked by a callback API promisified through Promise.promisify or Promise.promisifyAll and is not a typed error. caught in .error handler
 
 AggregateError
   -> A collection of errors. caught in .error
 
 TimeoutError
   -> Signals that an operation has timed out
+
+.cancel
+  -> cancels a promise. it is an error to consume an already cancelled promise, doing such a thing will give you a promise that is rejected with new CancellationError("late cancellation observer") as the rejection reason.
 
 CancellationError
   -> Signals that an operation has been aborted or cancelled
